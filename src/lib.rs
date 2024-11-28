@@ -1,4 +1,4 @@
-use mcap::{Channel, Schema, records::MessageHeader};
+use mcap::{Channel, records::MessageHeader};
 
 use std::borrow::Cow;
 use std::collections::HashMap;
@@ -33,7 +33,7 @@ impl<'a, W: Write + Seek> McapLogger<'a, W> {
         match level {
             // "MCAP event on topic {}: {:?}"
             _ => {
-                if let Some(mut header) = self.headers.get_mut(&msg.topic()) {
+                if let Some(header) = self.headers.get_mut(&msg.topic()) {
                     header.sequence += 1;
                     header.log_time = std::time::SystemTime::now()
                         .duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos() as u64;
@@ -43,7 +43,7 @@ impl<'a, W: Write + Seek> McapLogger<'a, W> {
                     w.write_to_known_channel(header, &msg.message().unwrap()).unwrap();
                 } else {
                     let channel_id = w.add_channel(&msg.channel()).unwrap();
-                    let mut header = MessageHeader {
+                    let header = MessageHeader {
                         channel_id,
                         sequence: 0,
                         log_time: std::time::SystemTime::now()

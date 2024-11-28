@@ -1,11 +1,8 @@
 use anyhow::Result;
 
-use mcap::{Channel, Schema, records::MessageHeader, Writer};
+use mcap::{Channel, Schema, Writer};
 
-use tracing_mcap::{McapMessage, McapLogger};
-
-use tracing_subscriber::prelude::*;
-use tracing_subscriber::{Registry, layer::SubscriberExt, util::SubscriberInitExt};
+use telem_rs::{McapMessage, McapLogger};
 
 use schemars::{schema_for, JsonSchema};
 
@@ -15,8 +12,6 @@ use std::borrow::Cow;
 use std::collections::BTreeMap;
 use std::fs;
 use std::io::BufWriter;
-
-use valuable::Valuable;
 
 #[derive(Copy, Clone, Debug, Serialize, Deserialize, JsonSchema)]
 struct Pose {
